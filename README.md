@@ -5,7 +5,6 @@
 1. Explain What Express.Router does for us
 1. Create External Controller File for Routes
 1. Move Server.js Routes to External Controller File
-1. Require Mongoose in Controller File
 1. Use Controller File in Server.js
 1. Remove References to Base of Controller's URLs
 
@@ -45,31 +44,31 @@ router.post('/fruits/', (req, res)=>{
     } else { //if not checked, req.body.readyToEat is undefined
         req.body.readyToEat = false;
     }
-    Fruit.create(req.body, ()=>{
+   
         res.redirect('/fruits');
-    });
+   
 });
 
 router.get('/fruits', (req, res)=>{
-    Fruit.find({}, (error, allFruits)=>{
+    
         res.render('index.ejs', {
-            fruits: allFruits
+            fruits: Fruits
         });
-    });
+
 });
 
 router.get('/fruits/:id', (req, res)=>{
-    Fruit.findById(req.params.id, (err, foundFruit)=>{
+   
         res.render('show.ejs', {
-            fruit:foundFruit
+            fruit: Fruit[req.params.id]
         });
-    });
+   
 });
 
 router.delete('/fruits/:id', (req, res)=>{
-    Fruit.findByIdAndRemove(req.params.id, (err, data)=>{
+        Fruits.splice(req.params.id,1)
         res.redirect('/fruits')
-    });
+ 
 });
 
 router.get('/fruits/:id/edit', (req, res)=>{
@@ -89,10 +88,10 @@ router.put('/fruits/:id', (req, res)=>{
     } else {
         req.body.readyToEat = false;
     }
-    //{new: true} tells mongoose to send the updated model into the callback
-    Fruit.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, updatedModel)=>{
-        res.redirect('/fruits');
-    });
+    
+    Fruit[req.params.id] = req.body
+    res.redirect('/fruits');
+ 
 });
 
 module.exports = router;
@@ -143,42 +142,42 @@ router.post('/', (req, res)=>{
     } else { //if not checked, req.body.readyToEat is undefined
         req.body.readyToEat = false;
     }
-    Fruit.create(req.body, ()=>{
-        res.redirect('/fruits');
-    });
+    Fruit.push(req.body)
+    res.redirect('/fruits');
+
 });
 
 router.get('/', (req, res)=>{
-    Fruit.find({}, (error, allFruits)=>{
-        res.render('index.ejs', {
-            fruits: allFruits
-        });
+    
+    res.render('index.ejs', {
+        fruits: Fruits
     });
+  
 });
 
 router.get('/:id', (req, res)=>{
-    Fruit.findById(req.params.id, (err, foundFruit)=>{
-        res.render('show.ejs', {
-            fruit:foundFruit
-        });
+    
+    res.render('show.ejs', {
+        fruit: Fruit[req.params.id]
     });
+   
 });
 
 router.delete('/:id', (req, res)=>{
-    Fruit.findByIdAndRemove(req.params.id, (err, data)=>{
-        res.redirect('/fruits')
-    });
+   Fruits.splice(req.params.id, 1);
+   res.redirect('/fruits');
+  
 });
 
 router.get('/:id/edit', (req, res)=>{
-    Fruit.findById(req.params.id, (err, foundFruit)=>{ //find the fruit
+   
         res.render(
     		'edit.ejs',
     		{
-    			fruit: foundFruit //pass in found fruit
+    			fruit: Fruits[req.params.id] //pass in found fruit
     		}
     	);
-    });
+
 });
 
 router.put('/:id', (req, res)=>{
@@ -187,10 +186,11 @@ router.put('/:id', (req, res)=>{
     } else {
         req.body.readyToEat = false;
     }
-    //{new: true} tells mongoose to send the updated model into the callback
-    Fruit.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, updatedModel)=>{
-        res.redirect('/fruits');
-    });
+    
+    Fruits[req.params.id] = req.body
+    
+    res.redirect('/fruits');
+ 
 });
 
 module.exports = router;
