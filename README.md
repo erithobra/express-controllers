@@ -15,6 +15,12 @@
 
 ## Create External Controller File for Routes
 
+So far in our `fruits-app` we have a model which interacts with the data, we have views which has all our EJS files but we don't have controllers yet. 
+
+**Quck Recap:** What is MVC? Why do we need it?
+
+So in order to follow MVC archotecture, we will start by creating `controllers` folder under `fruits-app`.
+
 1. `mkdir controllers`
 1. `touch controllers/fruits.js`
 1. Edit controllers/fruits.js
