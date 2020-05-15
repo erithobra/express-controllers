@@ -1,29 +1,31 @@
-# Express Router
+# MVC in Express
 
-## Lesson Objectives
+**Quck Recap:** What is MVC? Why do we need it?
 
-1. Explain What Express.Router does for us
-1. Create External Controller File for Routes
-1. Move Server.js Routes to External Controller File
-1. Use Controller File in Server.js
-1. Remove References to Base of Controller's URLs
+## Code Along
+We will continue to work on `fruits-app`. So far we have models and views built and our app does a full CRUD on fruits.
 
-## Explain What Express.Router does for us
-
-- Our server.js file is getting rather bloated
-- express.Router will let us put our routes in a separate file
-
-## Create External Controller File for Routes
+### Create External Controller File
 
 So far in our `fruits-app` we have a model which interacts with the data, we have views which has all our EJS files but we don't have controllers yet. 
 
-**Quck Recap:** What is MVC? Why do we need it?
 
 So in order to follow MVC archotecture, we will start by creating `controllers` folder under `fruits-app`.
 
 1. `mkdir controllers`
-1. `touch controllers/fruits.js`
-1. Edit controllers/fruits.js
+1. `type nul > controllers/fruits.js`
+
+
+Let's leave it at this for now. We have to got to set up aur routes before that.
+
+### Create Routes
+
+Before we go ahead with controllers let's use Express Router to create some routes. What we are looking to do here is reduce the amount of code `server.js` has in order to make our app more maintainable.
+
+1. `mkdir routes`
+2. `type nul > routes\fruits.js`
+
+Edit this file to add,
 
 ```javascript
 const express = require('express');
@@ -32,172 +34,105 @@ const router = express.Router();
 module.exports = router;
 ```
 
-## Move Server.js Routes to External Controller File
+`express.Router()` creates a new router object. A [router](https://expressjs.com/en/api.html#router) object is an isolated instance of middleware and routes. You can think of it as a “mini-application,” capable only of performing middleware and routing functions. Every Express application has a built-in app router.	
 
-rename `app` to `router`
+Before we move away from here, let's add another file `index.js` under `routes` dir, `type nul > routes\index.js`. This will export fruits route or any other route file we create.
 
-```javascript
-const express = require('express');
-const router = express.Router();
-
-router.get('/fruits/new', (req, res)=>{
-    res.render('new.ejs');
-});
-
-router.post('/fruits/', (req, res)=>{
-    if(req.body.readyToEat === 'on'){ //if checked, req.body.readyToEat is set to 'on'
-        req.body.readyToEat = true;
-    } else { //if not checked, req.body.readyToEat is undefined
-        req.body.readyToEat = false;
-    }
-   
-        res.redirect('/fruits');
-   
-});
-
-router.get('/fruits', (req, res)=>{
-    
-        res.render('index.ejs', {
-            fruits: Fruits
-        });
-
-});
-
-router.get('/fruits/:id', (req, res)=>{
-   
-        res.render('show.ejs', {
-            fruit: Fruit[req.params.id]
-        });
-   
-});
-
-router.delete('/fruits/:id', (req, res)=>{
-        Fruits.splice(req.params.id,1)
-        res.redirect('/fruits')
- 
-});
-
-router.get('/fruits/:id/edit', (req, res)=>{
-    Fruit.findById(req.params.id, (err, foundFruit)=>{ //find the fruit
-        res.render(
-    		'edit.ejs',
-    		{
-    			fruit: foundFruit //pass in found fruit
-    		}
-    	);
-    });
-});
-
-router.put('/fruits/:id', (req, res)=>{
-    if(req.body.readyToEat === 'on'){
-        req.body.readyToEat = true;
-    } else {
-        req.body.readyToEat = false;
-    }
-    
-    Fruit[req.params.id] = req.body
-    res.redirect('/fruits');
- 
-});
-
-module.exports = router;
+```
+module.exports = {    fruits: require('./fruits')}
 ```
 
-## Require Fruit Model in Controller File
+### Back to fruits Controller
 
-```javascript
-const express = require('express');
-const router = express.Router();
-const Fruit = require('../models/fruits.js')
-//...
+We are going to start with our homepage and add the method that renders it in `controllers/fruits.js`. Add fruit model in the controller.
+
+```
+const fruits = require('../models/fruits.js')const index = (req, res) => {    res.render('index.ejs', {        fruits : fruits    });};  module.exports = {    index};
 ```
 
-The `Fruit` model is no longer needed in `server.js`.  Remove it:
+While we are here, just like with routes we will add `type nul > controllers/index.js` to export all our controllers.
 
-```javascript
-const express = require('express');
-const app = express();
-const mongoose = require('mongoose');
-const db = mongoose.connection;
-const bodyParser = require('body-parser');
-const methodOverride = require('method-override');
+```
+module.exports = {    fruits: require('./fruits')}
 ```
 
-## Use Controller File in Server.js
+Let's briefly go back to `routes/fruits.js` and add the controller that router will send the request to.
 
-```javascript
-const fruitsController = require('./controllers/fruits.js');
-app.use('/fruits', fruitsController);
+```
+const express = require('express');const router = express.Router();const ctrl = require('../controllers');router.get('/', ctrl.fruits.index);module.exports = router;
 ```
 
-## Remove References to Base of Controller's URLs
+### Update Server.js to Routes
 
-Since we've specified that the controller works with all urls starting with /fruits, we can remove this from the controller file:
+For now we will start by importing `routes/fruits.js` to `server.js` and removing the earlier code.
+
+```
+const routes = require('./routes');
+
+app.use('/fruits', routes.fruits)
+```
+
+What we are saying here is all the requests starting from `/fruits` will be handled by `fruits.js` routes. Which will further pass it on to the appropriate controller.
+
+Make sure to save all the changes and restart server if not running already. Open the homepage [http://localhost:3000/fruits](http://localhost:3000/fruits) in the browser.
+
+## You Do then We Do
+
+Now that you have seen the whole flow for one route, let's make similar change for another route  `/fruits/:index` where if requested we return `show.ejs`. Remember start with controller, then update the routes.
+
+Also, don't forget to export the funtions in the controller.
+
+
+## Update Routes to Create a New Fruit
+
+
+### Start with Controller
 
 ```javascript
-const express = require('express');
-const router = express.Router();
+const renderNew = (req, res) => {    res.render('new.ejs');}const postFruit = (req, res) => {    if(req.body.readyToEat === 'on'){ //if checked, req.body.readyToEat is set to 'on'        req.body.readyToEat = true; //do some data correction    } else { //if not checked, req.body.readyToEat is undefined        req.body.readyToEat = false; //do some data correction    }    fruits.push(req.body);        res.redirect('/fruits');}
+```
 
-router.get('/new', (req, res)=>{
-    res.render('new.ejs');
-});
+#### Export them
 
-router.post('/', (req, res)=>{
-    if(req.body.readyToEat === 'on'){ //if checked, req.body.readyToEat is set to 'on'
-        req.body.readyToEat = true;
-    } else { //if not checked, req.body.readyToEat is undefined
-        req.body.readyToEat = false;
-    }
-    Fruit.push(req.body)
-    res.redirect('/fruits');
+```
+module.exports = {    index,    renderNew,    postFruit,    show}
+```
 
-});
+### Update Routes
 
-router.get('/', (req, res)=>{
-    
-    res.render('index.ejs', {
-        fruits: Fruits
-    });
+```
+router.get('/new', ctrl.fruits.renderNew);router.post('/', ctrl.fruits.postFruit);
+```
+
+### Remove above routes from server.js
+
+
+## Independent Practice
+So far we have show and create in our controller. Let's refactor all the remaining routes to controller and routes. And keep updating `server.js`
+
+
+A the end the `Fruit` model is no longer needed in `server.js`.  So make sure to remove it.
+
+
+## Finally Controller, Routes & Server.js will look like
+
+### controllers/fruits.js
+
+```
+const fruits = require('../models/fruits.js')const index = (req, res) => {    res.render('index.ejs', {        fruits : fruits    });};const show = (req, res) => {    res.render('show.ejs', {        fruit: fruits[req.params.index]    });}const renderNew = (req, res) => {    res.render('new.ejs');}const postFruit = (req, res) => {    if(req.body.readyToEat === 'on'){ //if checked, req.body.readyToEat is set to 'on'        req.body.readyToEat = true; //do some data correction    } else { //if not checked, req.body.readyToEat is undefined        req.body.readyToEat = false; //do some data correction    }    fruits.push(req.body);        res.redirect('/fruits');}const renderEdit = (req, res) => {    res.render(		'edit.ejs', //render views/edit.ejs		{ //pass in an object that contains			fruit: fruits[req.params.index], //the fruit object			index: req.params.index //... and its index in the array		}	);}const editFruit = (req, res) => {    if(req.body.readyToEat === 'on'){ //if checked, req.body.readyToEat is set to 'on'        req.body.readyToEat = true;    } else { //if not checked, req.body.readyToEat is undefined        req.body.readyToEat = false;    }	fruits[req.params.index] = req.body; //in our fruits array, find the index that is specified in the url (:index).  Set that element to the value of req.body (the input data)	res.redirect('/fruits'); //redirect to the index page}const deleteFruit = (req, res) => {    fruits.splice(req.params.index, 1); //remove the item from the array	res.redirect('/fruits');  //redirect back to index route}  module.exports = {    index,    renderNew,    postFruit,    show,    renderEdit,    editFruit,    deleteFruit  };
   
-});
-
-router.get('/:id', (req, res)=>{
-    
-    res.render('show.ejs', {
-        fruit: Fruit[req.params.id]
-    });
-   
-});
-
-router.delete('/:id', (req, res)=>{
-   Fruits.splice(req.params.id, 1);
-   res.redirect('/fruits');
-  
-});
-
-router.get('/:id/edit', (req, res)=>{
-   
-        res.render(
-    		'edit.ejs',
-    		{
-    			fruit: Fruits[req.params.id] //pass in found fruit
-    		}
-    	);
-
-});
-
-router.put('/:id', (req, res)=>{
-    if(req.body.readyToEat === 'on'){
-        req.body.readyToEat = true;
-    } else {
-        req.body.readyToEat = false;
-    }
-    
-    Fruits[req.params.id] = req.body
-    
-    res.redirect('/fruits');
- 
-});
-
-module.exports = router;
 ```
+
+### routes/fruits.js
+
+```
+const express = require('express');const router = express.Router();const ctrl = require('../controllers');router.get('/new', ctrl.fruits.renderNew);router.get('/', ctrl.fruits.index);router.get('/:index', ctrl.fruits.show);router.post('/', ctrl.fruits.postFruit);router.get('/:index/edit', ctrl.fruits.renderEdit);router.put('/:index', ctrl.fruits.editFruit);router.delete('/:index', ctrl.fruits.deleteFruit);module.exports = router;
+```
+
+### server.js
+
+```
+const express = require('express');const bodyParser = require('body-parser');const methodOverride = require('method-override');const app = express();//app is an objectconst routes = require('./routes');app.use(bodyParser.urlencoded({extended:false}));app.use(methodOverride('_method'));app.use('/fruits', routes.fruits)app.listen(3000, ()=>{    console.log("listening");});
+```
+
+![](https://media.giphy.com/media/8JW82ndaYfmNoYAekM/giphy.gif)
