@@ -1,4 +1,4 @@
-# MVC in Express
+# Express Controllers
 
 **Quck Recap:** What is MVC? Why do we need it?
 
