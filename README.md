@@ -3,14 +3,14 @@
 **Quck Recap:** What is MVC? Why do we need it?
 
 ## Code Along
-We will continue to work on `fruits-app`. So far we have models and views built and our app does a full CRUD on fruits.
+We will continue to work on `fruit-app`. So far we have models and views built and our app does a full CRUD on fruits.
 
 ### Create External Controller File
 
-So far in our `fruits-app` we have a model which interacts with the data, we have views which has all our EJS files but we don't have controllers yet. 
+So far in our `fruit-app` we have a model which interacts with the data, we have views which has all our EJS files but we don't have controllers yet. 
 
 
-So in order to follow MVC archotecture, we will start by creating `controllers` folder under `fruits-app`.
+So in order to follow MVC archotecture, we will start by creating `controllers` folder under `fruitcontr-app`.
 
 1. `mkdir controllers`
 1. `type nul > controllers/fruits.js`
@@ -132,7 +132,18 @@ const express = require('express');const router = express.Router();const ctrl 
 ### server.js
 
 ```
-const express = require('express');const bodyParser = require('body-parser');const methodOverride = require('method-override');const app = express();//app is an objectconst routes = require('./routes');app.use(bodyParser.urlencoded({extended:false}));app.use(methodOverride('_method'));app.use('/fruits', routes.fruits)app.listen(3000, ()=>{    console.log("listening");});
+const express = require('express');
+const fruits = require('./models/fruits');
+const methodOverride = require('method-override');
+const routes = require('./routes');
+
+const app = express();
+
+app.use(methodOverride('_method'));
+
+app.use(express.urlencoded({ extended: true }));
+
+app.use('/fruits', routes.fruits)app.listen(3000, ()=>{    console.log('I am listening on port 3000');});
 ```
 
 ![](https://media.giphy.com/media/8JW82ndaYfmNoYAekM/giphy.gif)
