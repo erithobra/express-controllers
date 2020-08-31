@@ -146,4 +146,38 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/fruits', routes.fruits)app.listen(3000, ()=>{    console.log('I am listening on port 3000');});
 ```
 
+<br>
+
+## Serve Static files
+
+Finally, let's add some CSS to our app. First, we need to tell express where to look for static files in general (css, front-end js files, fonts, images, etc.). In `server.js` add this middleware above all the others.
+
+```js
+app.use(express.static("public"));
+```
+
+Then, in the root of the app create a `public` folder. our html is already lookling for a `css/app.css` file, so create a `css` folder and `app.css` inside.
+
+![](https://i.imgur.com/XIvl3C4.png)
+
+Add a simple rule to `public/css/app.css`to confirm it's working!
+
+```css
+body {
+  color: red;
+}
+```
+
+Link this css in `index.ejs`
+
+```
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="/css/app.css" />
+</head>
+```
+
+<br>
+
 ![](https://media.giphy.com/media/8JW82ndaYfmNoYAekM/giphy.gif)
