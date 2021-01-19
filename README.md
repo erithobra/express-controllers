@@ -98,7 +98,7 @@ Make sure to save all the changes and restart server if not running already. Ope
 
 ## You Do then We Do
 
-Now that you have seen the whole flow for one route, let's make similar change for another route  `/fruits/:id` where if requested we return `show.ejs`. Remember start with controller, then update the routes.
+Now that you have seen the whole flow for one route, let's make similar change for another route  `/fruits/:index` where if requested we return `show.ejs`. Remember start with controller, then update the routes.
 
 Also, don't forget to export the funtions in the controller.
 
