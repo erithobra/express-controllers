@@ -38,7 +38,7 @@ module.exports = router;
 
 Before we move away from here, let's add another file `index.js` under `routes` dir, `touch routes\index.js`. This will export fruits route or any other route file we create.
 
-```
+```js
 module.exports = {
     fruits: require('./fruits')
 }
@@ -48,7 +48,7 @@ module.exports = {
 
 We are going to start with our homepage and add the method that renders it in `controllers/fruits.js`. Add fruit model in the controller.
 
-```
+```js
 const fruits = require('../models/fruits.js')
 
 const index = (req, res) => {
@@ -64,7 +64,7 @@ module.exports = {
 
 While we are here, just like with routes we will add `touch controllers/index.js` to export all our controllers.
 
-```
+```js
 module.exports = {
     fruits: require('./fruits')
 }
@@ -72,7 +72,7 @@ module.exports = {
 
 Let's briefly go back to `routes/fruits.js` and add the controller that router will send the request to.
 
-```
+```js
 const express = require('express');
 const router = express.Router();
 const ctrl = require('../controllers');
@@ -86,7 +86,7 @@ module.exports = router;
 
 For now we will start by importing `routes/fruits.js` to `server.js` and removing the earlier code.
 
-```
+```js
 const routes = require('./routes');
 
 app.use('/fruits', routes.fruits)
@@ -127,7 +127,7 @@ const postFruit = (req, res) => {
 
 #### Export them
 
-```
+```js
 module.exports = {
     index,
     renderNew,
@@ -138,7 +138,7 @@ module.exports = {
 
 ### Update Routes
 
-```
+```js
 router.get('/new', ctrl.fruits.renderNew);
 router.post('/', ctrl.fruits.postFruit);
 ```
@@ -157,7 +157,7 @@ A the end the `Fruit` model is no longer needed in `server.js`.  So make sure to
 
 ### controllers/fruits.js
 
-```
+```js
 const fruits = require('../models/fruits.js')
 
 const index = (req, res) => {
@@ -226,7 +226,7 @@ module.exports = {
 
 ### routes/fruits.js
 
-```
+```js
 const express = require('express');
 const router = express.Router();
 const ctrl = require('../controllers');
@@ -244,7 +244,7 @@ module.exports = router;
 
 ### server.js
 
-```
+```js
 const express = require('express');
 const fruits = require('./models/fruits');
 const methodOverride = require('method-override');
@@ -294,7 +294,3 @@ Link this css in `index.ejs`
     <link rel="stylesheet" href="/css/app.css" />
 </head>
 ```
-
-<br>
-
-![](https://media.giphy.com/media/8JW82ndaYfmNoYAekM/giphy.gif)
