@@ -23,7 +23,7 @@ Let's leave it at this for now. We have to got to set up aur routes before that.
 Before we go ahead with controllers let's use Express Router to create some routes. What we are looking to do here is reduce the amount of code `server.js` has in order to make our app more maintainable.
 
 1. `mkdir routes`
-2. `touch routes\fruits.js`
+2. `touch routes/fruits.js`
 
 Edit this file to add,
 
@@ -36,7 +36,7 @@ module.exports = router;
 
 `express.Router()` creates a new router object. A [router](https://expressjs.com/en/api.html#router) object is an isolated instance of middleware and routes. You can think of it as a “mini-application,” capable only of performing middleware and routing functions. Every Express application has a built-in app router.	
 
-Before we move away from here, let's add another file `index.js` under `routes` dir, `touch routes\index.js`. This will export fruits route or any other route file we create.
+Before we move away from here, let's add another file `index.js` under `routes` dir, `touch routes/index.js`. This will export fruits route or any other route file we create.
 
 ```js
 module.exports = {
