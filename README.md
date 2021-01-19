@@ -10,10 +10,10 @@ We will continue to work on `fruit-app`. So far we have models and views built a
 So far in our `fruit-app` we have a model which interacts with the data, we have views which has all our EJS files but we don't have controllers yet. 
 
 
-So in order to follow MVC architecture, we will start by creating `controllers` folder under `fruitcontr-app`.
+So in order to follow MVC architecture, we will start by creating `controllers` folder under `fruit-app`.
 
 1. `mkdir controllers`
-1. `type nul > controllers/fruits.js`
+1. `touch controllers/fruits.js`
 
 
 Let's leave it at this for now. We have to got to set up aur routes before that.
@@ -23,7 +23,7 @@ Let's leave it at this for now. We have to got to set up aur routes before that.
 Before we go ahead with controllers let's use Express Router to create some routes. What we are looking to do here is reduce the amount of code `server.js` has in order to make our app more maintainable.
 
 1. `mkdir routes`
-2. `type nul > routes\fruits.js`
+2. `touch routes\fruits.js`
 
 Edit this file to add,
 
