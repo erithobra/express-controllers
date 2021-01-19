@@ -36,7 +36,7 @@ module.exports = router;
 
 `express.Router()` creates a new router object. A [router](https://expressjs.com/en/api.html#router) object is an isolated instance of middleware and routes. You can think of it as a “mini-application,” capable only of performing middleware and routing functions. Every Express application has a built-in app router.	
 
-Before we move away from here, let's add another file `index.js` under `routes` dir, `type nul > routes\index.js`. This will export fruits route or any other route file we create.
+Before we move away from here, let's add another file `index.js` under `routes` dir, `touch routes\index.js`. This will export fruits route or any other route file we create.
 
 ```
 module.exports = {
@@ -62,7 +62,7 @@ module.exports = {
 };
 ```
 
-While we are here, just like with routes we will add `type nul > controllers/index.js` to export all our controllers.
+While we are here, just like with routes we will add `touch controllers/index.js` to export all our controllers.
 
 ```
 module.exports = {
