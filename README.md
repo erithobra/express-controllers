@@ -168,7 +168,7 @@ const index = (req, res) => {
 
 const show = (req, res) => {
     res.render('show.ejs', {
-        fruit: fruits[req.params.id]
+        fruit: fruits[req.params.index]
     });
 }
 
@@ -191,8 +191,8 @@ const renderEdit = (req, res) => {
     res.render(
 		'edit.ejs', //render views/edit.ejs
 		{ //pass in an object that contains
-			fruit: fruits[req.params.id], //the fruit object
-			id: req.params.id //... and its index in the array
+			fruit: fruits[req.params.index], //the fruit object
+			index: req.params.index //... and its index in the array
 		}
 	);
 }
@@ -203,12 +203,12 @@ const editFruit = (req, res) => {
     } else { //if not checked, req.body.readyToEat is undefined
         req.body.readyToEat = false;
     }
-	fruits[req.params.id] = req.body; //in our fruits array, find the index that is specified in the url (:id).  Set that element to the value of req.body (the input data)
+	fruits[req.params.index] = req.body; //in our fruits array, find the index that is specified in the url (:index).  Set that element to the value of req.body (the input data)
 	res.redirect('/fruits'); //redirect to the index page
 }
 
 const deleteFruit = (req, res) => {
-    fruits.splice(req.params.id, 1); //remove the item from the array
+    fruits.splice(req.params.index, 1); //remove the item from the array
 	res.redirect('/fruits');  //redirect back to index route
 }
   
@@ -233,11 +233,11 @@ const ctrl = require('../controllers');
 
 router.get('/new', ctrl.fruits.renderNew);
 router.get('/', ctrl.fruits.index);
-router.get('/:id', ctrl.fruits.show);
+router.get('/:index', ctrl.fruits.show);
 router.post('/', ctrl.fruits.postFruit);
-router.get('/:id/edit', ctrl.fruits.renderEdit);
-router.put('/:id', ctrl.fruits.editFruit);
-router.delete('/:id', ctrl.fruits.deleteFruit);
+router.get('/:index/edit', ctrl.fruits.renderEdit);
+router.put('/:index', ctrl.fruits.editFruit);
+router.delete('/:index', ctrl.fruits.deleteFruit);
 
 module.exports = router;
 ```
